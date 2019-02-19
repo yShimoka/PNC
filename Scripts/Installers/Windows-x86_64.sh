@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # Install required utilities.
-apt-get install curl mingw-w64 -y
+sudo apt-get install curl mingw-w64 -y
 
 # Download all the libraries.
 mkdir -p Downloaded/Libraries
