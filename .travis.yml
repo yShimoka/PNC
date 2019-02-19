@@ -51,4 +51,20 @@ install:
 script:
   - ./Scripts/build.sh
 
-# TODO - Deploy the resulting app.
+# Deploy the resulting app.
+deploy:
+  # Deploy to amazon S3 bucket.
+  - provider: s3
+    access_key_id: AKIAJPE7Y4UFAFAHOO7Q
+    secret_access_key:
+      secure: "kjb4NbeaNNRPd4OgHPR3T7KOZ2j2tbmyJ6NQBmDwqQlCQCbZ2plFQ0bzKCOEbtiJLmIuWyOpxzy6TFk4Q7sdO1TegCDa4eKB9aB6zkrrIgDaFGoW3/Gy9X/iFH3lYb3eHs0NWOObndRP3riaYxX/Fbneqpl2H2wYtZMSC94d7yvy4LPFOWhhPZewVaJM7G85qpY+W/k209jRgn96cgwR9pcQKtj5B8jpKza//PE1pwqd/ghL2Md07qvSDc0nrtRQUzDa5HgG9M1E9hzApWsaHEKoIKOd94DjVixU3KtEV3BrCGbcs0G9na4C2tzG7ksOXrbg1dMAfzUXtn+KJkebSlMwPrjTAwZKnpJn729erny4uy8LqI37UBw3HakBUsaQMcSusP0Wdd+6d4qbLXo+jvMFJ+mbIdv7qq/7RcSJZ0sHgqJOyxfpYP9WJRtV6g/zWl2S6SvTXgSsu2PLo3CGmJH3LLmKiU9tSwlJ9gwueUtZ7wdyJxgP7adhI/kUzEKwdpArQOtvmXhIhi4KcjM2lZRJJ/pb8hC8tv0bySdMNuoOgHu4dggbdoHF+xS7uETfdYJsdK6do/q1Z7UenjmvB0H5tA4crqkLOdh9rst39iBpcJGU4N/jN/LTL5QoyRA78kyerHov2MscAFyy7/jv/zDAyvv3kySvW7Q638/MXu4="
+    bucket: defi-t2.jb-caillaud.fr
+    skip_cleanup: true
+    acl: public_read
+    region: eu-west-3
+    upload-dir: Travis-CI/Built-Items/Mobius
+    local_dir: Build/out
+    on:
+      branch:
+        - master
+        - ci-setup
