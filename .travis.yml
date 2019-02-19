@@ -1,0 +1,54 @@
+language: c
+
+# Specify the matrix of all possible platforms
+matrix:
+  include:
+    - name: "macOS"
+      os: osx
+      dist: trusty
+      env:
+        - PLAFTORM=Darwin
+        - ARCH=x86_64
+
+    - name: "Linux - 64bits"
+      os: linux
+      dist: trusty
+      env:
+        - PLAFTORM=Linux
+        - ARCH=x86_64
+
+    - name: "Linux - 32bits"
+      os: linux
+      dist: trusty
+      env:
+        - PLAFTORM=Linux
+        - ARCH=x86
+
+    - name: "Windows - 64bits"
+      os: linux
+      dist: trusty
+      env:
+        - PLAFTORM=Windows
+        - ARCH=x86_64
+
+    - name: "Windows - 32bits"
+      os: linux
+      dist: trusty
+      env:
+        - PLAFTORM=Windows
+        - ARCH=x86
+
+# Ensure that the scripts are executable.
+before_install:
+  - sudo chmod +x ./Scripts/*.sh
+  - sudo chmod +x ./Scripts/Installers/*.sh
+
+# Install rquired dependencies.
+install:
+  - bash ./Scripts/install.sh
+
+# Build the application.
+script:
+  - ./Scripts/build.sh
+
+# TODO - Deploy the resulting app.
