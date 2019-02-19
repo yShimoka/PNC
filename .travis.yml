@@ -62,7 +62,7 @@ deploy:
     skip_cleanup: true
     acl: public_read
     region: eu-west-3
-    upload-dir: Travis-CI/Built-Items/Mobius
+    upload-dir: Versions/${PLATFORM}
     local_dir: Build/out
     on:
       branch:

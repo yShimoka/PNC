@@ -6,7 +6,7 @@ make
 
 # Package the results.
 mkdir -p Build/out
-cp -r Assets Build/bin/
+cp -r Assets/ Build/bin/
 cd Build/bin
 zip -r ../out/PNC-${MAJOR}.${MINOR}_${TRAVIS_BUILD_NUMBER}-${PLATFORM}_${ARCH}.zip *
 cd ../..
