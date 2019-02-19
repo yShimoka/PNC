@@ -7,35 +7,35 @@ matrix:
       os: osx
       dist: trusty
       env:
-        - PLAFTORM=Darwin
+        - PLATFORM=Darwin
         - ARCH=x86_64
 
     - name: "Linux - 64bits"
       os: linux
       dist: trusty
       env:
-        - PLAFTORM=Linux
+        - PLATFORM=Linux
         - ARCH=x86_64
 
     - name: "Linux - 32bits"
       os: linux
       dist: trusty
       env:
-        - PLAFTORM=Linux
+        - PLATFORM=Linux
         - ARCH=x86
 
     - name: "Windows - 64bits"
       os: linux
       dist: trusty
       env:
-        - PLAFTORM=Windows
+        - PLATFORM=Windows
         - ARCH=x86_64
 
     - name: "Windows - 32bits"
       os: linux
       dist: trusty
       env:
-        - PLAFTORM=Windows
+        - PLATFORM=Windows
         - ARCH=x86
 
 # Ensure that the scripts are executable.
