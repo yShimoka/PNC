@@ -50,3 +50,19 @@ modules.order
 Module.symvers
 Mkfile.old
 dkms.conf
+
+# Cmake files.
+CMakeCache.txt
+CMakeFiles/
+Makefile
+cmake_install.cmake
+
+# Build artifacts.
+Build/
+Libraries/
+
+# macOS Finder's cache files.
+.DS_Store
+
+# VSCode project files.
+.vscode/
