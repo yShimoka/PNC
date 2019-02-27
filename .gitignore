@@ -66,3 +66,9 @@ Libraries/
 
 # VSCode project files.
 .vscode/
+
+# Ignore Code::Blocks project files.
+bin/
+obj/
+*.cbp
+*.depend
