@@ -4,6 +4,7 @@ cmake_minimum_required(VERSION 3.0.0)
 
 # Create the project.
 project(PNC VERSION 0.1.0)
+set_property(GLOBAL PROPERTY C_STANDARD 99)
 
 # Enable C compiling.
 enable_language(C)
@@ -50,6 +51,7 @@ enable_language(C)
     set(CMAKE_FRAMEWORK_PATH "${PROJECT_SOURCE_DIR}/Frameworks")
 
     # Prepare the platform-specific linkers.
+    message(STATUS "Loading linker file : Scripts/Linkers/${CMAKE_SYSTEM_NAME}.cmake")
     include("Scripts/Linkers/${CMAKE_SYSTEM_NAME}.cmake")
 # ---
 

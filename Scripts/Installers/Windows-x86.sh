@@ -16,23 +16,26 @@ curl -s -o Downloaded/Libraries/SDL2_image.tar.gz https://libsdl.org/projects/SD
 echo "SDL2_image OK"
 
 # Copy the libraries over.
-mkdir -p Libraries/lib Libraries/bin Libraries/include
+mkdir -p Libraries/{lib,bin,include}
+mkdir -p Libraries/include/{SDL2,SDL2_mixer,SDL2_image,SDL2_ttf}
 echo "Copying libraries locally ..."
-tar -x -f Downloaded/Libraries/SDL2.tar.gz --directory=Libraries/lib SDL2-2.0.9/i686-w64-mingw32/lib/ --strip-components=3
-tar -x -f Downloaded/Libraries/SDL2.tar.gz --directory=Libraries/include SDL2-2.0.9/i686-w64-mingw32/include/SDL2/ --strip-components=4
-tar -x -f Downloaded/Libraries/SDL2.tar.gz --directory=Libraries/bin SDL2-2.0.9/i686-w64-mingw32/bin/ --strip-components=3
 
-tar -x -f Downloaded/Libraries/SDL2_ttf.tar.gz --directory=Libraries/lib SDL2_ttf-2.0.15/i686-w64-mingw32/lib/ --strip-components=3
-tar -x -f Downloaded/Libraries/SDL2_ttf.tar.gz --directory=Libraries/include SDL2_ttf-2.0.15/i686-w64-mingw32/include/SDL2/ --strip-components=4
-tar -x -f Downloaded/Libraries/SDL2_ttf.tar.gz --directory=Libraries/bin SDL2_ttf-2.0.15/i686-w64-mingw32/bin/ --strip-components=3
+tar -x -f Downloaded/Libraries/SDL2.tar.gz --directory=Libraries/lib --strip-components=3 SDL2-2.0.9/i686-w64-mingw32/lib/
+tar -x -f Downloaded/Libraries/SDL2.tar.gz --directory=Libraries/bin --strip-components=3 SDL2-2.0.9/i686-w64-mingw32/bin/
+tar -x -f Downloaded/Libraries/SDL2.tar.gz --directory=Libraries/include/SDL2 --strip-components=4 SDL2-2.0.9/i686-w64-mingw32/include/SDL2
 
-tar -x -f Downloaded/Libraries/SDL2_mixer.tar.gz --directory=Libraries/lib SDL2_mixer-2.0.4/i686-w64-mingw32/lib/ --strip-components=3
-tar -x -f Downloaded/Libraries/SDL2_mixer.tar.gz --directory=Libraries/include SDL2_mixer-2.0.4/i686-w64-mingw32/include/SDL2/ --strip-components=4
-tar -x -f Downloaded/Libraries/SDL2_mixer.tar.gz --directory=Libraries/bin SDL2_mixer-2.0.4/i686-w64-mingw32/bin/ --strip-components=3
+tar -x -f Downloaded/Libraries/SDL2_ttf.tar.gz --directory=Libraries/lib --strip-components=3 SDL2_ttf-2.0.15/i686-w64-mingw32/lib/
+tar -x -f Downloaded/Libraries/SDL2_ttf.tar.gz --directory=Libraries/bin --strip-components=3 SDL2_ttf-2.0.15/i686-w64-mingw32/bin/
+tar -x -f Downloaded/Libraries/SDL2_ttf.tar.gz --directory=Libraries/include/SDL2_ttf --strip-components=4 SDL2_ttf-2.0.15/i686-w64-mingw32/include/SDL2
 
-tar -x -f Downloaded/Libraries/SDL2_image.tar.gz --directory=Libraries/lib SDL2_image-2.0.4/i686-w64-mingw32/lib/ --strip-components=3
-tar -x -f Downloaded/Libraries/SDL2_image.tar.gz --directory=Libraries/include SDL2_image-2.0.4/i686-w64-mingw32/include/SDL2/ --strip-components=4
-tar -x -f Downloaded/Libraries/SDL2_image.tar.gz --directory=Libraries/bin SDL2_image-2.0.4/i686-w64-mingw32/bin/ --strip-components=3
+tar -x -f Downloaded/Libraries/SDL2_mixer.tar.gz --directory=Libraries/lib --strip-components=3 SDL2_mixer-2.0.4/i686-w64-mingw32/lib/
+tar -x -f Downloaded/Libraries/SDL2_mixer.tar.gz --directory=Libraries/bin --strip-components=3 SDL2_mixer-2.0.4/i686-w64-mingw32/bin/
+tar -x -f Downloaded/Libraries/SDL2_mixer.tar.gz --directory=Libraries/include/SDL2_mixer --strip-components=4 SDL2_mixer-2.0.4/i686-w64-mingw32/include/SDL2
+
+tar -x -f Downloaded/Libraries/SDL2_image.tar.gz --directory=Libraries/lib --strip-components=3 SDL2_image-2.0.4/i686-w64-mingw32/lib/
+tar -x -f Downloaded/Libraries/SDL2_image.tar.gz --directory=Libraries/bin --strip-components=3 SDL2_image-2.0.4/i686-w64-mingw32/bin/
+tar -x -f Downloaded/Libraries/SDL2_image.tar.gz --directory=Libraries/include/SDL2_image --strip-components=4 SDL2_image-2.0.4/i686-w64-mingw32/include/SDL2
+
 echo "Done"
 
 # Copy the dynamic libraries to the output result.

@@ -1,7 +1,8 @@
 #!/bin/sh
 
 # Build the application.
-cmake . -DCMAKE_TOOLCHAIN_FILE=Scripts/Toolchains/${PLATFORM}-${ARCH}.cmake
+echo "${PLATFORM}-${ARCH}"
+cmake . -DCMAKE_TOOLCHAIN_FILE=./Scripts/Toolchains/${PLATFORM}-${ARCH}.cmake
 make
 
 # Package the results.

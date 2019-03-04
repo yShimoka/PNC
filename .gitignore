@@ -60,6 +60,7 @@ cmake_install.cmake
 # Build artifacts.
 Build/
 Libraries/
+Frameworks/
 Downloaded/
 
 # macOS Finder's cache files.
