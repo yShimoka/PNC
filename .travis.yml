@@ -2,13 +2,14 @@ language: c
 
 os: linux
 
+# Prepare the matrices for windows and linux compilation.
 env:
-  - PLATFORM=Linux
-  - PLATFORM=Windows
-  - ARCH=x86_64
-  - ARCH=x86
+  - PLATFORM=Linux ARCH=x86_64
+  - PLATFORM=Windows ARCH=x86_64
+  - PLATFORM=Linux ARCH=x86
+  - PLATFORM=Windows ARCH=x86
 
-# Specify the matrix of all possible platforms
+# Create the OSX-specific matrix.
 matrix:
   include:
     - os: osx
