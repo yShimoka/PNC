@@ -18,6 +18,6 @@ sudo apt-get install \
     libsdl2-mixer-dev -y
 
 # Create a symbolic link for TTF, mixer and image.
-ln -s /usr/include/SDL2 /usr/include/SDL2_ttf
-ln -s /usr/include/SDL2 /usr/include/SDL2_mixer
-ln -s /usr/include/SDL2 /usr/include/SDL2_image
+sudo ln -s /usr/include/SDL2 /usr/include/SDL2_ttf
+sudo ln -s /usr/include/SDL2 /usr/include/SDL2_mixer
+sudo ln -s /usr/include/SDL2 /usr/include/SDL2_image

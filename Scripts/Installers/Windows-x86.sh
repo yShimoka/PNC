@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # Install required utilities.
 sudo apt-get install curl mingw-w64 -y
