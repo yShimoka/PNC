@@ -1,42 +1,21 @@
 language: c
 
-# Specify the matrix of all possible platforms
+os: linux
+
+# Prepare the matrices for windows and linux compilation.
+env:
+  - PLATFORM=Linux ARCH=x86_64
+  - PLATFORM=Windows ARCH=x86_64
+  - PLATFORM=Linux ARCH=x86
+  - PLATFORM=Windows ARCH=x86
+
+# Create the OSX-specific matrix.
 matrix:
   include:
-    - name: "macOS"
-      os: osx
-      dist: trusty
+    - os: osx
       env:
-        - PLATFORM=Darwin
-        - ARCH=x86_64
-
-    - name: "Linux - 64bits"
-      os: linux
-      dist: trusty
-      env:
-        - PLATFORM=Linux
-        - ARCH=x86_64
-
-    - name: "Linux - 32bits"
-      os: linux
-      dist: trusty
-      env:
-        - PLATFORM=Linux
-        - ARCH=x86
-
-    - name: "Windows - 64bits"
-      os: linux
-      dist: trusty
-      env:
-        - PLATFORM=Windows
-        - ARCH=x86_64
-
-    - name: "Windows - 32bits"
-      os: linux
-      dist: trusty
-      env:
-        - PLATFORM=Windows
-        - ARCH=x86
+        PLATFORM=Darwin
+        ARCH=x86_64
 
 # Ensure that the scripts are executable.
 before_install:
@@ -67,4 +46,12 @@ deploy:
     on:
       branch:
         - master
-        - ci-setup
+  
+  # Deploy to github releases.
+  - provider: github
+    api_key:
+      secure: "YqM//QlE0IvL5k8YP55rT7IxaWIbc8x2+zSVzselRnaW/75U9YI+hWPGHsvXZJE67E6gsY2jpbwDDjbSkb1VCoLxlgrReY4f6twu/kUxsw1MBFquXuJB3/H6u5CSFiTzOfWOtlk8LxChN8FKrCv7s05ETNNhJte6zrr/kGLCshFNRGBRm2+wbhggjiN2NFC9nlxwWh+9FR7ds320OFxHVYlak+qi9fB197uE5GVFghlkRHSChiUjoUoaG2wV3+Wksj90WP5GeEuBtNzXnUVa5l4bp5jxH1sgoxiILAL1NjrS84lNoOpNSsRjUoMhyen0sq7F801Rvk9/ycV2ez2Rjs0TijhqnTpzu40gIpZ5gmcy4UE1qMZNfFRt0PpsCYxNTZG6vokIbEcKtAPM9wBGrB99NQML9YPIobqxa8cm6+nOEh4P1FYgilOD7qnw9gnjMRrWyiPTe6JWuIoY6ouY8ZOnM0+pMC0OYFGvpBN+6noKU8pRb/dxC2PBlciA8rWJNHhRScHbvcTfJWeRiySdgMWI716u5uuJ6wEXJtvQ1h3XB93ZghwdDKRKGFYkiXLaEaDBz7ATIBOgx/tX2Wps1+MlIthui4O2d2s9asWX6BT0vvseOml4mEzD6VHKvMeNKLnRDNjalG8A8mqhue31lCYXQUEjKcDzGo794DL/RyY="
+    skip_cleanup: true
+    file: "Build/out/PNC-${MAJOR}_${MINOR}_${TRAVIS_BUILD_NUMBER}-${PLATFORM}_${ARCH}.zip"
+    on:
+      tags: true
