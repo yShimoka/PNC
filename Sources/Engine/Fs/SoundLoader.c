@@ -1,6 +1,7 @@
 #include "Engine/Fs/SoundLoader.h"
 
 #include <string.h>
+#include <stdio.h>
 
 USG_List _USG_MIX_getSFXList() {
     static USG_List listInstance = NULL;
