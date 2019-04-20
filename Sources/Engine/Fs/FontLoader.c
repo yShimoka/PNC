@@ -3,6 +3,7 @@
 #include "Engine/Rendering/Windows.h"
 
 #include <string.h>
+#include <stdio.h>
 
 USG_List _USG_FONT_getFontList() {
     static USG_List listInstance = NULL;
@@ -30,7 +31,7 @@ struct USG_Font* USG_FONT_getFont(const char * path, int size) {
 
     while ((head != NULL) && !(USG_FONT_isSame(head->pContents, &((struct USG_Font){NULL, path, size}))))
         head = head->pNext;
-    
+
     if (head != NULL) return head->pContents;
 
     TTF_Font* font = TTF_OpenFont(path, size);
