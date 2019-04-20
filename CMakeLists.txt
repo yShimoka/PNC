@@ -26,7 +26,7 @@ enable_language(C)
 
 # --- Load build info ---
     # Check the debug status of this build.
-    if($ENV{RELEASE})
+    if($ENV{DEBUG})
         # Build in debug mode.
         set(CMAKE_BUILD_TYPE Debug)
         message(STATUS "Building in Debug mode.")
