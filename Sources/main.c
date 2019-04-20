@@ -3,6 +3,8 @@
 #include "Engine/Fs/ImageLoader.h"
 #include "Engine/Fs/FontLoader.h"
 #include "Engine/Fs/SoundLoader.h"
+#include "Engine/Math/Transform.h"
+#include "Engine/Math/Vector.h"
 
 #include <SDL2/SDL.h>
 #include <SDL2_image/SDL_image.h>
@@ -23,27 +25,45 @@ int main(int argv, char * argc[]) {
     USG_Window* pWindow = _USG_WINMAN_getWindow();
     SDL_SetRenderDrawColor(pWindow->pRenderer, 255, 0, 0, 255);
 
-    struct USG_Renderable* simpleSquare1 = USG_RENDER_createSquarePrimitive((SDL_Color){255, 255, 255, 255}, (SDL_Rect){0, 0, 25, 25});
-    struct USG_Renderable* sampletexture = USG_RENDER_createTexture(USG_IMG_loadFromFile("Assets/Images/UVTextureChecker.png"), (struct USG_UVCoords){0.5, 0.8, 0.1, 0.1}, (SDL_Rect){100, 100, 400, 400});
+    struct USG_Renderable* main = USG_RENDER_createSquarePrimitive(
+        (SDL_Color) { 255, 255, 255, 255 },
+        (SDL_Rect) { 50, 50, 500, 500 }
+    );
+    
+    struct USG_Renderable* child = USG_RENDER_createSquarePrimitive(
+        (SDL_Color) { 0, 0, 255, 255 },
+        (SDL_Rect) { 0, 0, 50, 50 }
+    );
 
-    struct USG_Font* fontA = USG_FONT_getFont("Assets/Fonts/Ubuntu.ttf", 32);
-    struct USG_Font* fontB = USG_FONT_getFont("Assets/Fonts/Ubuntu.ttf", 32);
-    struct USG_Renderable* sampletext = USG_RENDER_createTexture(USG_FONT_render("Hello, World!", USG_FONT_getFont("Assets/Fonts/Ubuntu.ttf", 32), (SDL_Color){255, 255, 255, 255}, (SDL_Color){0, 0, 0, 0}), (struct USG_UVCoords){0, 0, 1, 1}, (SDL_Rect) {0, 150, 100, 25});
-
-    struct USG_Sfx* sfx = USG_MIX_loadSFX("Assets/Sounds/beep-07.wav");
-    Mix_VolumeChunk(sfx->pSoundChunck, 128);
+    struct USG_Transform mainT = { NULL, (struct USG_Vector) { 50, 50 }, 1, 2 };
+    struct USG_Vector childRel = { 0, 0 }; 
 
     int stop = 0;
+    int grab = 0;
     while (!stop) {
         uint32_t start = SDL_GetTicks();
+
+        childRel.x += 0.1f;
+        childRel.y += 0.2f;
+
+        child->dest.x = USG_V_reverseTransform(mainT, childRel).x;
+        child->dest.y = USG_V_reverseTransform(mainT, childRel).y;
+
+        main->dest.x = mainT.origin.x;
+        main->dest.y = mainT.origin.y;
 
         SDL_Event ev;
         while (SDL_PollEvent(&ev)) {
             if (ev.type == SDL_QUIT) {
                 stop = 1;
-            } else if (ev.type == SDL_KEYDOWN) {
-                if (ev.key.keysym.sym == SDLK_SPACE) {
-                    Mix_PlayChannel(-1, sfx->pSoundChunck, 0);
+            } else if (ev.type == SDL_MOUSEBUTTONDOWN) {
+                grab = 1;
+            } else if (ev.type == SDL_MOUSEBUTTONUP) {
+                grab = 0;
+            } else if (ev.type == SDL_MOUSEMOTION) {
+                if (grab) {
+                    mainT.origin.x += ev.motion.xrel;
+                    mainT.origin.y += ev.motion.yrel;
                 }
             }
         }
