@@ -1,4 +1,5 @@
-#!/bin/sh
+#!/bin/bash
+set -e
 
 # Install zip, make and cmake.
 sudo apt-get update; sudo apt-get install make cmake zip -y;
