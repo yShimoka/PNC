@@ -5,6 +5,7 @@ cmake_minimum_required(VERSION 3.0.0)
 # Create the project.
 project(PNC VERSION 0.1.0)
 set_property(GLOBAL PROPERTY C_STANDARD 99)
+set(CMAKE_C_FLAGS "-std=c99")
 
 # Enable C compiling.
 enable_language(C)
