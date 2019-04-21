@@ -8,7 +8,7 @@ echo "${PLATFORM}-${ARCH}"
 cmake . -DCMAKE_TOOLCHAIN_FILE=./Scripts/Toolchains/${PLATFORM}-${ARCH}.cmake
 make
 
-# Package the results.
+# Package the results. 
 mkdir -p Build/out
 cp -r Assets Build/bin/
 cd Build/bin

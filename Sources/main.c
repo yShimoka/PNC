@@ -27,7 +27,9 @@ int main(int argv, char * argc[]) {
     USG_GameObject main = USG_createSquare(USG_COLOR(255, 255, 255, 255), USG_RECT(300, 200, 200, 200), "Base");
 
     USG_GameObject child = USG_createSquare(USG_COLOR(128, 26, 26, 255), USG_RECT(50, 50, 100, 100), "Front");
-    child->parent = main;
+    //child->parent = main;
+    child->mask = &(main->dest);
+    child->bIsMasked = 1;
 
     int stop = 0;
     int grab = 0;
@@ -44,7 +46,7 @@ int main(int argv, char * argc[]) {
                 grab = 0;
             } else if (ev.type == SDL_MOUSEMOTION && grab) {
                 USG_GO_move(main, USG_VECTOR(ev.motion.xrel, ev.motion.yrel));
-                USG_GO_move(child, USG_VECTOR(ev.motion.xrel, ev.motion.yrel));
+                //USG_GO_move(child, USG_VECTOR(ev.motion.xrel, ev.motion.yrel));
             }
         }
 

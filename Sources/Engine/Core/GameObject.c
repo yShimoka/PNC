@@ -101,18 +101,24 @@ void _USG_updateGameObject(void * element) {
 
     // Update the renderable.
     // Apply the transformations.
-    struct USG_Vector size = gObj->dest.extent, position = gObj->dest.origin;
+    struct USG_Rect dest = gObj->dest;
     USG_GameObject parent = gObj->parent;
     while (parent != NULL) {
-        position = USG_V_reverseTransform(parent->transform, position);
+        dest.origin = USG_V_reverseTransform(parent->transform, dest.origin);
 
         parent = parent->parent;
     }
 
-    // Update the renderable.
-    gObj->renderable->dest = USG_RECT_V(position, size);
+    // Check if the masking is enabled.
+    if (gObj->bIsMasked && gObj->mask != NULL) {
+        // Get the intersection of the square and its mask.
+        struct USG_Rect inter = USG_R_intersect(dest, *(gObj->mask));
 
-    // TODO : Implement masking.
+        dest = inter;
+    }
+
+    // Update the renderable.
+    gObj->renderable->dest = dest;
 }
 
 void USG_updateGameObjects() {
