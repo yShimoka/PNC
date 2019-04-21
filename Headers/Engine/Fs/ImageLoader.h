@@ -6,9 +6,16 @@
 
 #include "Engine/Tools/List.h"
 
+struct USG_Texture {
+    SDL_Texture* pTexture;
+    const char * pPath;
+};
+
 USG_List _USG_IMG_getImgList();
 
-SDL_Texture* USG_IMG_loadFromFile(const char * path);
+struct USG_Texture* USG_IMG_loadFromFile(const char * path);
+
+void USG_IMG_clear();
 
 
 #endif /* __USAGI_IMAGELOADER_H__ */

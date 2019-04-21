@@ -26,8 +26,8 @@ int main(int argv, char * argc[]) {
     USG_Window* pWindow = _USG_WINMAN_getWindow();
     SDL_SetRenderDrawColor(pWindow->pRenderer, 255, 0, 0, 255);
 
-    USG_LAYER_make("Front-End", 1);
-    USG_LAYER_make("Back-End", 2);
+    USG_LAYER_make("Front-End", 2);
+    USG_LAYER_make("Back-End", 1);
 
     struct USG_Renderable* main = USG_RENDER_createSquarePrimitive(
         (SDL_Color) { 255, 255, 255, 255 },
@@ -41,8 +41,9 @@ int main(int argv, char * argc[]) {
     );
     USG_LAYER_addRenderable("Back-End", child);
 
-    struct USG_Renderable* child2 = USG_RENDER_createSquarePrimitive(
-        (SDL_Color) { 0, 0, 255, 255 },
+    struct USG_Renderable* child2 = USG_RENDER_createTexture(
+        USG_IMG_loadFromFile("Assets/Images/UVTextureChecker.png")->pTexture,
+        (struct USG_UVCoords) { 0.5, 0.5, 0.1, 0.1 },
         (SDL_Rect) { 0, 0, 50, 50 }
     );
     USG_LAYER_addRenderable("Back-End", child2);
