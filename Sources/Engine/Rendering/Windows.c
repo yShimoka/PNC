@@ -1,4 +1,8 @@
 #include "Engine/Rendering/Windows.h"
+#include "Engine/Rendering/Layer.h"
+#include "Engine/Fs/FontLoader.h"
+#include "Engine/Fs/ImageLoader.h"
+#include "Engine/Fs/SoundLoader.h"
 
 USG_Window* _USG_WINMAN_getWindow() {
     static USG_Window windowInstance;
@@ -45,7 +49,12 @@ void USG_WINMAN_quit() {
     USG_Window* pWindow = _USG_WINMAN_getWindow();
 
     // Clear the renderable list.
-    USG_RENDER_clear();
+    USG_LAYER_clear();
+
+    // Clear any loadded assets.
+    USG_FONT_clear();
+    USG_MIX_clear();
+    //USG_IMF
 
     // Destroy the renderer.
     SDL_DestroyRenderer(pWindow->pRenderer);
@@ -65,8 +74,14 @@ void USG_WINMAN_setWindowParams(const char * title, int x, int y, int width, int
     pWindow->flags = flags;    
 }
 
+void _USG_WINMAN_renderLayer(void* element) {
+    struct USG_Layer *layer = (struct USG_Layer *)element;
+
+    USG_LIST_forEach(layer->pRenderables, USG_WINMAN_render);
+}
+
 void USG_WINMAN_present() {
-    USG_LIST_forEach(_USG_RENDER_getRenderableList(), USG_WINMAN_render);
+    USG_LIST_forEach(_USG_LAYER_getLayerList(), _USG_WINMAN_renderLayer);
 
     USG_Window* pWindow = _USG_WINMAN_getWindow();
 

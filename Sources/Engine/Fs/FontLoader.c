@@ -1,6 +1,7 @@
 #include "Engine/Fs/FontLoader.h"
 
 #include "Engine/Rendering/Windows.h"
+#include "Engine/Tools/Allocator.h"
 
 #include <string.h>
 #include <stdio.h>
@@ -38,7 +39,7 @@ struct USG_Font* USG_FONT_getFont(const char * path, int size) {
 
     if (font) {
         // Create a new usagi font.
-        struct USG_Font* usgFont = (struct USG_Font*)malloc(sizeof(struct USG_Font));
+        struct USG_Font* usgFont = (struct USG_Font*)USG_allocate(sizeof(struct USG_Font));
 
         usgFont->pFont = font;
         usgFont->pFontPath = path;

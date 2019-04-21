@@ -23,16 +23,12 @@ struct USG_Renderable {
 
     struct USG_UVCoords src;
     SDL_Rect dest;
-
 };
 
-USG_List _USG_RENDER_getRenderableList();
 
-struct USG_Renderable* USG_RENDER_createSquarePrimitive(SDL_Color color, SDL_Rect size);
+struct USG_Renderable* USG_RENDER_createSquarePrimitive(SDL_Color color, SDL_Rect sizem);
 struct USG_Renderable* USG_RENDER_createTexture(SDL_Texture* texture, struct USG_UVCoords source, SDL_Rect dest);
 
 void _USG_RENDER_clearElement(void* element);
-
-void USG_RENDER_clear();
 
 #endif /* __USAGI_RENDERABLE_H__ */

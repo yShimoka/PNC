@@ -1,5 +1,6 @@
 #include "Engine/Rendering/Windows.h"
 #include "Engine/Rendering/Renderable.h"
+#include "Engine/Rendering/Layer.h"
 #include "Engine/Fs/ImageLoader.h"
 #include "Engine/Fs/FontLoader.h"
 #include "Engine/Fs/SoundLoader.h"
@@ -25,15 +26,26 @@ int main(int argv, char * argc[]) {
     USG_Window* pWindow = _USG_WINMAN_getWindow();
     SDL_SetRenderDrawColor(pWindow->pRenderer, 255, 0, 0, 255);
 
+    USG_LAYER_make("Front-End", 1);
+    USG_LAYER_make("Back-End", 2);
+
     struct USG_Renderable* main = USG_RENDER_createSquarePrimitive(
         (SDL_Color) { 255, 255, 255, 255 },
         (SDL_Rect) { 50, 50, 500, 500 }
     );
+    USG_LAYER_addRenderable("Front-End", main);
     
     struct USG_Renderable* child = USG_RENDER_createSquarePrimitive(
         (SDL_Color) { 0, 0, 255, 255 },
         (SDL_Rect) { 0, 0, 50, 50 }
     );
+    USG_LAYER_addRenderable("Back-End", child);
+
+    struct USG_Renderable* child2 = USG_RENDER_createSquarePrimitive(
+        (SDL_Color) { 0, 0, 255, 255 },
+        (SDL_Rect) { 0, 0, 50, 50 }
+    );
+    USG_LAYER_addRenderable("Back-End", child2);
 
     struct USG_Transform mainT = { NULL, (struct USG_Vector) { 50, 50 }, 1, 2 };
     struct USG_Vector childRel = { 0, 0 }; 
@@ -43,8 +55,8 @@ int main(int argv, char * argc[]) {
     while (!stop) {
         uint32_t start = SDL_GetTicks();
 
-        childRel.x += 0.1f;
-        childRel.y += 0.2f;
+        childRel.x -= 0.1f;
+        childRel.y -= 0.2f;
 
         child->dest.x = USG_V_reverseTransform(mainT, childRel).x;
         child->dest.y = USG_V_reverseTransform(mainT, childRel).y;
