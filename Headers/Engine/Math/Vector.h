@@ -1,6 +1,8 @@
 #ifndef __USAGI_VECTOR_H__
 #define __USAGI_VECTOR_H__
 
+#define USG_VECTOR(x, y) (struct USG_Vector) { x, y }
+
 struct USG_Vector {
     float x, y;
 };

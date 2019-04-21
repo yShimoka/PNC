@@ -18,7 +18,7 @@ int USG_FONT_isSame(struct USG_Font* self, struct USG_Font* other);
 
 struct USG_Font* USG_FONT_getFont(const char * path, int size);
 
-SDL_Texture* USG_FONT_render(const char * text, struct USG_Font* font, SDL_Color fgColor, SDL_Color bgColor);
+SDL_Texture* USG_FONT_render(const char * text, struct USG_Font* font, SDL_Color fgColor);
 
 void USG_FONT_clear();
 

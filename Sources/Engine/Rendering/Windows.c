@@ -12,25 +12,26 @@ USG_Window* _USG_WINMAN_getWindow() {
 
 void USG_WINMAN_render(void* element) {
     struct USG_Renderable* renderable = (struct USG_Renderable*)element;
-    USG_Window* pWindow = _USG_WINMAN_getWindow();
 
+    if (!renderable->bVisible) return;
+
+    USG_Window* pWindow = _USG_WINMAN_getWindow();
     // Check the render type.
     if (renderable->type == USG_RENDER_PRIMITIVE_SQUARE) {
         // Render a square.
         SDL_SetRenderDrawColor(pWindow->pRenderer, renderable->color.r, renderable->color.g, renderable->color.b, renderable->color.a);
-        SDL_RenderFillRect(pWindow->pRenderer, &(renderable->dest));
+        SDL_RenderFillRect(pWindow->pRenderer, &USG_R_SDL(renderable->dest));
     } else if (renderable->type == USG_RENDER_TEXTURE) {
         // Compute the UV coordinates.
         uint32_t format; int access, w, h;
         SDL_QueryTexture(renderable->pTexture, &format, &access, &w, &h);
-        SDL_Rect UV;
-        UV.x = renderable->src.x * w;
-        UV.w = renderable->src.w * w;
-        UV.y = renderable->src.y * h;
-        UV.h = renderable->src.h * h;
+        struct USG_Rect uv = USG_R_mul(renderable->src, USG_VECTOR(w, h));
+
+        SDL_Rect sdlSrc = USG_R_SDL(uv);
+        SDL_Rect sdlDst = USG_R_SDL(renderable->dest);
 
         // Render the texture.
-        SDL_RenderCopy(pWindow->pRenderer, renderable->pTexture, &(UV), &(renderable->dest));
+        SDL_RenderCopy(pWindow->pRenderer, renderable->pTexture, &(sdlSrc), &(sdlDst));
     }
 }
 

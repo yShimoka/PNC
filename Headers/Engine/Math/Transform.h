@@ -3,8 +3,10 @@
 
 #include "Engine/Math/Vector.h"
 
+#define USG_TRANSFORM(x, y, up, right) (struct USG_Transform) { USG_VECTOR(x, y), up, right }
+#define USG_DEFAULT_TRANSFORM USG_TRANSFORM(0, 0, 1, 1)
+
 struct USG_Transform {
-    struct USG_Transform* pParent;
     struct USG_Vector origin;
 
     float up, right;

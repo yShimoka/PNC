@@ -1,14 +1,10 @@
 #include "Engine/Rendering/Windows.h"
-#include "Engine/Rendering/Renderable.h"
+#include "Engine/Core/GameObject.h"
 #include "Engine/Rendering/Layer.h"
-#include "Engine/Fs/ImageLoader.h"
-#include "Engine/Fs/FontLoader.h"
-#include "Engine/Fs/SoundLoader.h"
-#include "Engine/Math/Transform.h"
-#include "Engine/Math/Vector.h"
 
 #include <SDL2/SDL.h>
 #include <SDL2_image/SDL_image.h>
+#include <SDL2_ttf/SDL_ttf.h>
 #include <SDL2_mixer/SDL_mixer.h>
 
 int main(int argv, char * argc[]) {
@@ -24,63 +20,19 @@ int main(int argv, char * argc[]) {
     USG_WINMAN_init();
 
     USG_Window* pWindow = _USG_WINMAN_getWindow();
-    SDL_SetRenderDrawColor(pWindow->pRenderer, 255, 0, 0, 255);
 
-    USG_LAYER_make("Text", 3);
-    USG_LAYER_make("Front-End", 2);
-    USG_LAYER_make("Back-End", 1);
+    USG_LAYER_make("Base", 0);
+    USG_LAYER_make("Front", 1);
     
-    struct USG_Renderable* main = USG_RENDER_createSquarePrimitive(
-        (SDL_Color) { 255, 255, 255, 255 },
-        (SDL_Rect) { 50, 50, 500, 500 }
-    );
-    USG_LAYER_addRenderable("Front-End", main);
-    
-    struct USG_Renderable* child = USG_RENDER_createSquarePrimitive(
-        (SDL_Color) { 0, 0, 255, 255 },
-        (SDL_Rect) { 0, 0, 50, 50 }
-    );
-    USG_LAYER_addRenderable("Back-End", child);
+    USG_GameObject main = USG_createSquare(USG_COLOR(255, 255, 255, 255), USG_RECT(300, 200, 200, 200), "Base");
 
-    struct USG_Renderable* child2 = USG_RENDER_createTexture(
-        USG_IMG_loadFromFile("Assets/Images/UVTextureChecker.png")->pTexture,
-        (struct USG_UVCoords) { 0.5, 0.5, 0.1, 0.1 },
-        (SDL_Rect) { 0, 0, 50, 50 }
-    );
-    USG_LAYER_addRenderable("Back-End", child2);
-
-    struct USG_Renderable* windowTitle = USG_RENDER_createTexture(
-        USG_FONT_render(
-            "Hello, World !", 
-            USG_FONT_getFont("Assets/Fonts/VCR_OSD.ttf", 72),
-            (SDL_Color) { 0, 0, 0, 255 },
-            (SDL_Color) { 0, 0, 255, 255 }
-        ),
-        (struct USG_UVCoords) {0, 0, 1, 1},
-        (SDL_Rect) { 0, 0, 400, 50 }
-    );
-    USG_LAYER_addRenderable("Text", windowTitle);
-
-    struct USG_Transform mainT = { NULL, (struct USG_Vector) { 50, 50 }, 1, 2 };
-    struct USG_Vector childRel = { 0, 0 }; 
-    struct USG_Vector titleRel = { 25, 25 }; 
+    USG_GameObject child = USG_createSquare(USG_COLOR(128, 26, 26, 255), USG_RECT(50, 50, 100, 100), "Front");
+    child->parent = main;
 
     int stop = 0;
     int grab = 0;
     while (!stop) {
         uint32_t start = SDL_GetTicks();
-
-        childRel.x -= 0.1f;
-        childRel.y -= 0.2f;
-
-        child->dest.x = USG_V_reverseTransform(mainT, childRel).x;
-        child->dest.y = USG_V_reverseTransform(mainT, childRel).y;
-
-        windowTitle->dest.x = USG_V_reverseTransform(mainT, titleRel).x;
-        windowTitle->dest.y = USG_V_reverseTransform(mainT, titleRel).y;
-
-        main->dest.x = mainT.origin.x;
-        main->dest.y = mainT.origin.y;
 
         SDL_Event ev;
         while (SDL_PollEvent(&ev)) {
@@ -90,13 +42,13 @@ int main(int argv, char * argc[]) {
                 grab = 1;
             } else if (ev.type == SDL_MOUSEBUTTONUP) {
                 grab = 0;
-            } else if (ev.type == SDL_MOUSEMOTION) {
-                if (grab) {
-                    mainT.origin.x += ev.motion.xrel;
-                    mainT.origin.y += ev.motion.yrel;
-                }
+            } else if (ev.type == SDL_MOUSEMOTION && grab) {
+                USG_GO_move(main, USG_VECTOR(ev.motion.xrel, ev.motion.yrel));
+                USG_GO_move(child, USG_VECTOR(ev.motion.xrel, ev.motion.yrel));
             }
         }
+
+        USG_updateGameObjects();
         USG_WINMAN_present();
 
         uint32_t total = SDL_GetTicks() - start;
