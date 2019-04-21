@@ -30,8 +30,7 @@ struct USG_Texture* USG_IMG_loadFromFile(const char * path) {
     // Load the image from the file.
     SDL_Surface* img = IMG_Load(path);
 
-    if (img) {
-        fprintf(stdout, "Loaded image from : %s", path);
+    if (img != NULL) {
         SDL_Texture* sdlTexture = SDL_CreateTextureFromSurface(_USG_WINMAN_getWindow()->pRenderer, img);
         SDL_FreeSurface(img);
 
@@ -40,6 +39,8 @@ struct USG_Texture* USG_IMG_loadFromFile(const char * path) {
 
         texture->pPath = path;
         texture->pTexture = sdlTexture;
+
+        USG_LIST_append(_USG_IMG_getImgList(), texture);
 
         return texture;
     } else {
@@ -52,6 +53,7 @@ void _USG_IMG_clearTexture(void* element) {
     struct USG_Texture* texture = (struct USG_Texture *)element;
 
     SDL_DestroyTexture(texture->pTexture);
+
     USG_deallocate(texture);
 }
 

@@ -30,10 +30,6 @@ struct USG_Renderable* USG_RENDER_createTexture(SDL_Texture* texture, struct USG
 void _USG_RENDER_clearElement(void* element) {
     struct USG_Renderable* renderable = element;
     if (renderable != NULL) {
-        if (renderable->type == USG_RENDER_TEXTURE) {
-            SDL_DestroyTexture(renderable->pTexture);
-        }
-
         USG_deallocate(renderable);
     }
 }

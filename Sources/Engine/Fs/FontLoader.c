@@ -30,7 +30,10 @@ struct USG_Font* USG_FONT_getFont(const char * path, int size) {
     // Seek for the font in the list.
     struct USG_Node* head = *(_USG_FONT_getFontList());
 
-    while ((head != NULL) && !(USG_FONT_isSame(head->pContents, &((struct USG_Font){NULL, path, size}))))
+    while (
+        (head != NULL) && 
+        !(USG_FONT_isSame(head->pContents, &((struct USG_Font){NULL, path, size})))
+    )
         head = head->pNext;
 
     if (head != NULL) return head->pContents;
@@ -63,10 +66,12 @@ SDL_Texture* USG_FONT_render(const char * text, struct USG_Font* font, SDL_Color
     return texture;
 }
 
-void _USG_FONT_clearFont(void* font) {
-    if (font != NULL) {
-        TTF_CloseFont(font);
-    }
+void _USG_FONT_clearFont(void* element) {
+    struct USG_Font* font = (struct USG_Font*)element;
+    
+    TTF_CloseFont(font->pFont);
+        
+    USG_deallocate(font);
 }
 
 void USG_FONT_clear() {

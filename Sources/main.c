@@ -26,9 +26,10 @@ int main(int argv, char * argc[]) {
     USG_Window* pWindow = _USG_WINMAN_getWindow();
     SDL_SetRenderDrawColor(pWindow->pRenderer, 255, 0, 0, 255);
 
+    USG_LAYER_make("Text", 3);
     USG_LAYER_make("Front-End", 2);
     USG_LAYER_make("Back-End", 1);
-
+    
     struct USG_Renderable* main = USG_RENDER_createSquarePrimitive(
         (SDL_Color) { 255, 255, 255, 255 },
         (SDL_Rect) { 50, 50, 500, 500 }
@@ -48,8 +49,21 @@ int main(int argv, char * argc[]) {
     );
     USG_LAYER_addRenderable("Back-End", child2);
 
+    struct USG_Renderable* windowTitle = USG_RENDER_createTexture(
+        USG_FONT_render(
+            "Hello, World !", 
+            USG_FONT_getFont("Assets/Fonts/VCR_OSD.ttf", 72),
+            (SDL_Color) { 0, 0, 0, 255 },
+            (SDL_Color) { 0, 0, 255, 255 }
+        ),
+        (struct USG_UVCoords) {0, 0, 1, 1},
+        (SDL_Rect) { 0, 0, 400, 50 }
+    );
+    USG_LAYER_addRenderable("Text", windowTitle);
+
     struct USG_Transform mainT = { NULL, (struct USG_Vector) { 50, 50 }, 1, 2 };
     struct USG_Vector childRel = { 0, 0 }; 
+    struct USG_Vector titleRel = { 25, 25 }; 
 
     int stop = 0;
     int grab = 0;
@@ -61,6 +75,9 @@ int main(int argv, char * argc[]) {
 
         child->dest.x = USG_V_reverseTransform(mainT, childRel).x;
         child->dest.y = USG_V_reverseTransform(mainT, childRel).y;
+
+        windowTitle->dest.x = USG_V_reverseTransform(mainT, titleRel).x;
+        windowTitle->dest.y = USG_V_reverseTransform(mainT, titleRel).y;
 
         main->dest.x = mainT.origin.x;
         main->dest.y = mainT.origin.y;

@@ -54,7 +54,7 @@ void USG_WINMAN_quit() {
     // Clear any loadded assets.
     USG_FONT_clear();
     USG_MIX_clear();
-    //USG_IMF
+    USG_IMG_clear();
 
     // Destroy the renderer.
     SDL_DestroyRenderer(pWindow->pRenderer);
