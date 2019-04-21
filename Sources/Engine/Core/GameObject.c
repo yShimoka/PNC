@@ -92,6 +92,17 @@ USG_GameObject USG_createText(const char * text, const char * font, int fontSize
     return object;
 }
 
+struct USG_Rect USG_GO_getWorld(USG_GameObject object) {
+    struct USG_Rect world = object->dest;
+    USG_GameObject parent = object->parent;
+    while (parent != NULL) {
+        world.origin = USG_V_reverseTransform(parent->transform, world.origin);
+
+        parent = parent->parent;
+    }
+
+    return world;
+}
 
 void _USG_updateGameObject(void * element) {
     USG_GameObject gObj = (USG_GameObject)element;
@@ -101,24 +112,33 @@ void _USG_updateGameObject(void * element) {
 
     // Update the renderable.
     // Apply the transformations.
-    struct USG_Rect dest = gObj->dest;
-    USG_GameObject parent = gObj->parent;
-    while (parent != NULL) {
-        dest.origin = USG_V_reverseTransform(parent->transform, dest.origin);
-
-        parent = parent->parent;
-    }
+    struct USG_Rect dest = USG_GO_getWorld(gObj);
+    struct USG_Rect uv = gObj->uvs;
 
     // Check if the masking is enabled.
     if (gObj->bIsMasked && gObj->mask != NULL) {
         // Get the intersection of the square and its mask.
-        struct USG_Rect inter = USG_R_intersect(dest, *(gObj->mask));
+        struct USG_Rect inter = USG_R_intersect(dest, USG_GO_getWorld(gObj->mask));
+
+        // Morph the uv map.
+        //uv = USG_RECT_V(
+        //    USG_V_sub(inter.origin, dest.origin),
+        //    USG_V_sub(inter.extent, dest.extent)
+        //);
+        uv.origin = USG_V_sub(inter.origin,dest.origin);
+        uv.extent = inter.extent;
+
+        uv.origin.x /= dest.extent.x;
+        uv.origin.y /= dest.extent.y;
+        uv.extent.x /= dest.extent.x;
+        uv.extent.y /= dest.extent.y;
 
         dest = inter;
     }
 
     // Update the renderable.
     gObj->renderable->dest = dest;
+    gObj->renderable->src = uv;
 }
 
 void USG_updateGameObjects() {

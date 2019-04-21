@@ -16,7 +16,7 @@ struct USG_GameObjectBase {
     struct USG_Transform transform;
     struct USG_Rect uvs;
     struct USG_Rect dest;
-    struct USG_Rect *mask;
+    struct USG_GameObjectBase *mask;
 
     struct USG_Renderable* renderable;
 
@@ -40,5 +40,7 @@ struct USG_Vector USG_GO_getSize(USG_GameObject object);
 void USG_GO_move(USG_GameObject object, struct USG_Vector delta);
 
 void USG_updateGameObjects();
+
+void USG_clearGameObjects();
 
 #endif /* __USAGI_GAMEOBJECT_H__ */

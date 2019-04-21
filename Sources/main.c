@@ -21,15 +21,25 @@ int main(int argv, char * argc[]) {
 
     USG_Window* pWindow = _USG_WINMAN_getWindow();
 
+    USG_LAYER_make("Desktop", -1);
     USG_LAYER_make("Base", 0);
     USG_LAYER_make("Front", 1);
-    
-    USG_GameObject main = USG_createSquare(USG_COLOR(255, 255, 255, 255), USG_RECT(300, 200, 200, 200), "Base");
 
-    USG_GameObject child = USG_createSquare(USG_COLOR(128, 26, 26, 255), USG_RECT(50, 50, 100, 100), "Front");
-    //child->parent = main;
-    child->mask = &(main->dest);
-    child->bIsMasked = 1;
+    USG_GameObject desktop = USG_createSquare(USG_COLOR(0,120,127,255), USG_RECT(0, 0, 800, 600), "Desktop");
+    USG_GameObject windowFrame = USG_createSquare(USG_COLOR(0,0,0,255), USG_RECT(0, 0, 300, 200), "Base");
+    USG_GameObject windowTitleBar = USG_createSquare(USG_COLOR(0,0,200,255), USG_RECT(1, 1, 298, 25), "Base");
+    windowTitleBar->parent = windowFrame;
+    USG_GameObject windowTitle = USG_createText("Find the virus !", "Assets/Fonts/VCR_OSD.ttf", 72, USG_COLOR(255, 255, 255, 255), USG_RECT(5, 5, 150, 15), "Base");
+    windowTitle->parent = windowTitleBar;
+    USG_GameObject windowContents = USG_createSquare(USG_COLOR(191,184,191,255), USG_RECT(1, 27, 298, 172), "Base");
+    windowContents->parent = windowFrame;
+
+    USG_GameObject windowCross = USG_createSprite("Assets/Images/Close.png", USG_RECT_UNIT, USG_RECT(270, 2, 26, 26), "Base");
+    windowCross->parent = windowTitleBar;
+
+    USG_GameObject virus = USG_createSprite("Assets/Images/Virus.png", USG_RECT_UNIT, USG_RECT(500, 300, 50, 50), "Front");
+    virus->bIsMasked = 1;
+    virus->mask = windowContents;
 
     int stop = 0;
     int grab = 0;
@@ -45,8 +55,7 @@ int main(int argv, char * argc[]) {
             } else if (ev.type == SDL_MOUSEBUTTONUP) {
                 grab = 0;
             } else if (ev.type == SDL_MOUSEMOTION && grab) {
-                USG_GO_move(main, USG_VECTOR(ev.motion.xrel, ev.motion.yrel));
-                //USG_GO_move(child, USG_VECTOR(ev.motion.xrel, ev.motion.yrel));
+                USG_GO_move(windowFrame, USG_VECTOR(ev.motion.xrel, ev.motion.yrel));
             }
         }
 
@@ -59,7 +68,7 @@ int main(int argv, char * argc[]) {
         }
     }
 
-
+    USG_clearGameObjects();
     USG_WINMAN_quit();
 
     Mix_Quit();
