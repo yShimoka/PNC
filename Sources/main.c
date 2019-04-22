@@ -1,6 +1,7 @@
 #include "Engine/Rendering/Windows.h"
 #include "Engine/Core/GameObject.h"
 #include "Engine/Rendering/Layer.h"
+#include "Game/CreationComposantsBasiques.h"
 
 #include <SDL2/SDL.h>
 #include <SDL2_image/SDL_image.h>
@@ -21,26 +22,52 @@ int main(int argv, char * argc[]) {
 
     USG_Window* pWindow = _USG_WINMAN_getWindow();
 
-    USG_LAYER_make("Desktop", -1);
-    USG_LAYER_make("Base", 0);
-    USG_LAYER_make("Front", 1);
+    InitLayers();
 
-    USG_GameObject desktop = USG_createSquare(USG_COLOR(0,120,127,255), USG_RECT(0, 0, 800, 600), "Desktop");
-    USG_GameObject windowFrame = USG_createSquare(USG_COLOR(0,0,0,255), USG_RECT(0, 0, 300, 200), "Base");
-    USG_GameObject windowTitleBar = USG_createSquare(USG_COLOR(0,0,200,255), USG_RECT(1, 1, 298, 25), "Base");
-    windowTitleBar->parent = windowFrame;
-    USG_GameObject windowTitle = USG_createText("Find the virus !", "Assets/Fonts/VCR_OSD.ttf", 72, USG_COLOR(255, 255, 255, 255), USG_RECT(5, 5, 150, 15), "Base");
-    windowTitle->parent = windowTitleBar;
-    USG_GameObject windowContents = USG_createSquare(USG_COLOR(191,184,191,255), USG_RECT(1, 27, 298, 172), "Base");
-    windowContents->parent = windowFrame;
 
-    USG_GameObject windowCross = USG_createSprite("Assets/Images/Close.png", USG_RECT_UNIT, USG_RECT(270, 2, 26, 26), "Base");
-    windowCross->parent = windowTitleBar;
 
+
+
+
+
+    InitDesktop(&desktop,&taskBarFrame,&taskBarStartButtonContour,&taskBarStartButtonFrame,&taskBarStartButtonTitle,&taskBarStartButtonLogo);
+
+    InitConsole(&consoleFrame,&consoleTitleBar,&consoleTitleBarLogo,&consoleTitleBarText,&consoleContent,&consoleCross);
+
+    // A RANGER DANS DES METHODES !!!!
+    //test écriture console
+    USG_GameObject ConsoleText = USG_createText("Bonjour, je suis un virus. Je vais te", "Assets/Fonts/VCR_OSD.ttf", 72, USG_COLOR(255, 248, 255, 255), USG_RECT(5, 5, 270, 15), "Base");
+    ConsoleText->parent = consoleContent;
+
+    USG_GameObject ConsoleText1 = USG_createText("tester ! Si tu est trop faible, je", "Assets/Fonts/VCR_OSD.ttf", 72, USG_COLOR(255, 248, 255, 255), USG_RECT(5, 25, 260, 15), "Base");
+    ConsoleText1->parent = consoleContent;
+
+    USG_GameObject ConsoleText2 = USG_createText("détruirai toutes tes données.", "Assets/Fonts/VCR_OSD.ttf", 72, USG_COLOR(255, 248, 255, 255), USG_RECT(5, 45, 220, 15), "Base");
+    ConsoleText2->parent = consoleContent;
+
+    USG_GameObject ConsoleText3 = USG_createText("Commençons donne-moi...", "Assets/Fonts/VCR_OSD.ttf", 72, USG_COLOR(255, 248, 255, 255), USG_RECT(5, 65, 220, 15), "Base");
+    ConsoleText3->parent = consoleContent;
+
+    InitGiveMe(&giveMeFrame,&giveMeTitleBar,&giveMeTitleBarLogo,&giveMeTitleBarText,&giveMeContent,&giveMeCross);
+
+    USG_GameObject giveMeText = USG_createText("Une balle", "Assets/Fonts/VCR_OSD.ttf", 72, USG_COLOR(0, 0, 0, 255), USG_RECT(115, 100, 75, 15), "Front");
+    giveMeText->parent = NULL;
+    giveMeText->bIsMasked = 1;
+    giveMeText->mask = giveMeContent;
+
+    USG_GameObject Ball = USG_createSprite("Assets/Images/Ball.png", USG_RECT_UNIT, USG_RECT(10, 500, 20, 26), "Front");
+    Ball->parent = NULL;
+
+    USG_GameObject ballText = USG_createText("balle", "Assets/Fonts/VCR_OSD.ttf", 72, USG_COLOR(255, 248, 255, 255), USG_RECT(0, 30, 25, 15), "Front");
+    ballText->parent = Ball;
+
+    /* Ajout d'un objet caché
     USG_GameObject virus = USG_createSprite("Assets/Images/Virus.png", USG_RECT_UNIT, USG_RECT(500, 300, 50, 50), "Front");
+    virus->parent = NULL;
+
     virus->bIsMasked = 1;
     virus->mask = windowContents;
-
+    */
     int stop = 0;
     int grab = 0;
     while (!stop) {
@@ -55,7 +82,9 @@ int main(int argv, char * argc[]) {
             } else if (ev.type == SDL_MOUSEBUTTONUP) {
                 grab = 0;
             } else if (ev.type == SDL_MOUSEMOTION && grab) {
-                USG_GO_move(windowFrame, USG_VECTOR(ev.motion.xrel, ev.motion.yrel));
+                //Gestion grab sur une fenêtre ATTENTION comme je crée les fenêtres dans des méthodes sans utiliser de pointeur, je n'y est plus accès
+                USG_GO_move(giveMeFrame, USG_VECTOR(ev.motion.xrel, ev.motion.yrel));
+                USG_GO_move(Ball, USG_VECTOR(ev.motion.xrel, ev.motion.yrel));
             }
         }
 
