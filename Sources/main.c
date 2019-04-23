@@ -34,7 +34,7 @@ int main(int argv, char * argc[]) {
 
 
 
-    USG_GameObject test = USG_createSquare(USG_COLOR(255, 255, 255, 255), USG_RECT(0, 0, 1, 1), "Desktop");
+    USG_GameObject test = USG_createSquare(USG_COLOR(255, 255, 255, 255), USG_RECT(0, 0, 800, 600), "Desktop");
     USG_destroy(&test);
 
     // A RANGER DANS DES METHODES !!!!

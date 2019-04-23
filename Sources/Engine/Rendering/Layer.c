@@ -63,8 +63,47 @@ void USG_LAYER_addRenderable(const char * name, struct USG_Renderable* renderabl
         // Print the error.
         fprintf(stderr, "No such layer %s\n", name);
     } else {
+        struct USG_Layer * layer = (struct USG_Layer *)head->pContents;
         // Add the element to the layer.
-        USG_LIST_append(((struct USG_Layer *)head->pContents)->pRenderables, renderable);
+        USG_LIST_append(layer->pRenderables, renderable);
+        renderable->pLayer = layer;
+    }
+}
+
+void USG_LAYER_destroyRenderable(struct USG_Renderable* renderable) {
+    // Remove from the layer.
+    struct USG_Layer *layer = renderable->pLayer;
+
+    int index = USG_LIST_find(layer->pRenderables, renderable);
+
+    if (index > 0) USG_LIST_remove(layer->pRenderables, index);
+
+    // Destroy the renderable.
+    USG_deallocate(renderable);
+}
+
+void USG_LAYER_changeLayer(struct USG_Renderable* renderable, const char * newLayer) {
+    // Check if the layer exists.
+    struct USG_Node* head = USG_LIST_findFirst(*_USG_LAYER_getLayerList());
+
+    while (
+        (head != NULL) &&
+        (strcmp((*(struct USG_Layer *)(head->pContents)).pName, newLayer) != 0)
+    ) head = head->pNext;
+
+    if (head == NULL) {
+        // Print the error.
+        fprintf(stderr, "No such layer %s\n", newLayer);
+    } else {
+        struct USG_Layer * layer = (struct USG_Layer *)head->pContents;
+
+        // Remove it from the old layer.
+        USG_LIST_remove(renderable->pLayer->pRenderables, USG_LIST_find(renderable->pLayer->pRenderables, renderable));
+
+        // Add the element to the layer.
+        renderable->pLayer = layer;
+        USG_LIST_append(layer->pRenderables, renderable);
+
     }
 }
 

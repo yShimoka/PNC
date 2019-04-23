@@ -6,6 +6,8 @@
 #include "Engine/Tools/List.h"
 #include "Engine/Math/Rect.h"
 
+struct USG_Layer;
+
 enum USG_RenderableTypes {
     USG_RENDER_PRIMITIVE_SQUARE,
     USG_RENDER_TEXTURE
@@ -20,6 +22,8 @@ struct USG_Renderable {
 
     struct USG_Rect src;
     struct USG_Rect dest;
+
+    struct USG_Layer *pLayer;
 
     int bVisible;
 };

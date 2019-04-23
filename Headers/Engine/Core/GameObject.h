@@ -25,6 +25,7 @@ struct USG_GameObjectBase {
     void (*update)(struct USG_GameObjectBase *);
 
     int bIsMasked;
+    int bIsVisible;
 };
 
 typedef struct USG_GameObjectBase * USG_GameObject;
@@ -41,6 +42,8 @@ struct USG_Vector USG_GO_getPosition(USG_GameObject object);
 struct USG_Vector USG_GO_getWorldPosition(USG_GameObject object);
 struct USG_Vector USG_GO_getSize(USG_GameObject object);
 void USG_GO_move(USG_GameObject object, struct USG_Vector delta);
+
+void USG_changeLayer(USG_GameObject object, const char * newLayer);
 
 void USG_destroy(USG_GameObject* object);
 

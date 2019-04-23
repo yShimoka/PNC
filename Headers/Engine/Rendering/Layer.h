@@ -15,6 +15,8 @@ struct USG_Layer {
 USG_List _USG_LAYER_getLayerList();
 void USG_LAYER_make(const char * name, int zOrder);
 void USG_LAYER_addRenderable(const char * name, struct USG_Renderable* renderable);
+void USG_LAYER_destroyRenderable(struct USG_Renderable* renderable);
+void USG_LAYER_changeLayer(struct USG_Renderable* renderable, const char * newLayer);
 USG_List USG_LAYER_sortedRenderableList();
 
 void USG_LAYER_clear();
