@@ -38,6 +38,7 @@ USG_GameObject USG_createText(const char * text, const char * font, int fontSize
 void USG_GO_setPosition(USG_GameObject object, struct USG_Vector pos);
 void USG_GO_setSize(USG_GameObject object, struct USG_Vector size);
 struct USG_Vector USG_GO_getPosition(USG_GameObject object);
+struct USG_Vector USG_GO_getWorldPosition(USG_GameObject object);
 struct USG_Vector USG_GO_getSize(USG_GameObject object);
 void USG_GO_move(USG_GameObject object, struct USG_Vector delta);
 
