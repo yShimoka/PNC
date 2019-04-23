@@ -28,24 +28,27 @@ int main(int argv, char * argc[]) {
 
 
 
-
-
     InitDesktop(&desktop,&taskBarFrame,&taskBarStartButtonContour,&taskBarStartButtonFrame,&taskBarStartButtonTitle,&taskBarStartButtonLogo);
 
     InitConsole(&consoleFrame,&consoleTitleBar,&consoleTitleBarLogo,&consoleTitleBarText,&consoleContent,&consoleCross);
 
+
+
+    USG_GameObject test = USG_createSquare(USG_COLOR(255, 255, 255, 255), USG_RECT(0, 0, 1, 1), "Desktop");
+    USG_destroy(&test);
+
     // A RANGER DANS DES METHODES !!!!
-    //test écriture console
+    //test ï¿½criture console
     USG_GameObject ConsoleText = USG_createText("Bonjour, je suis un virus. Je vais te", "Assets/Fonts/VCR_OSD.ttf", 72, USG_COLOR(255, 248, 255, 255), USG_RECT(5, 5, 270, 15), "Base");
     ConsoleText->parent = consoleContent;
 
     USG_GameObject ConsoleText1 = USG_createText("tester ! Si tu est trop faible, je", "Assets/Fonts/VCR_OSD.ttf", 72, USG_COLOR(255, 248, 255, 255), USG_RECT(5, 25, 260, 15), "Base");
     ConsoleText1->parent = consoleContent;
 
-    USG_GameObject ConsoleText2 = USG_createText("détruirai toutes tes données.", "Assets/Fonts/VCR_OSD.ttf", 72, USG_COLOR(255, 248, 255, 255), USG_RECT(5, 45, 220, 15), "Base");
+    USG_GameObject ConsoleText2 = USG_createText("dï¿½truirai toutes tes donnï¿½es.", "Assets/Fonts/VCR_OSD.ttf", 72, USG_COLOR(255, 248, 255, 255), USG_RECT(5, 45, 220, 15), "Base");
     ConsoleText2->parent = consoleContent;
 
-    USG_GameObject ConsoleText3 = USG_createText("Commençons donne-moi...", "Assets/Fonts/VCR_OSD.ttf", 72, USG_COLOR(255, 248, 255, 255), USG_RECT(5, 65, 220, 15), "Base");
+    USG_GameObject ConsoleText3 = USG_createText("Commenï¿½ons donne-moi...", "Assets/Fonts/VCR_OSD.ttf", 72, USG_COLOR(255, 248, 255, 255), USG_RECT(5, 65, 220, 15), "Base");
     ConsoleText3->parent = consoleContent;
 
     InitGiveMe(&giveMeFrame,&giveMeTitleBar,&giveMeTitleBarLogo,&giveMeTitleBarText,&giveMeContent,&giveMeCross);
@@ -61,7 +64,7 @@ int main(int argv, char * argc[]) {
     USG_GameObject ballText = USG_createText("balle", "Assets/Fonts/VCR_OSD.ttf", 72, USG_COLOR(255, 248, 255, 255), USG_RECT(0, 30, 25, 15), "Front");
     ballText->parent = Ball;
 
-    /* Ajout d'un objet caché
+    /* Ajout d'un objet cachï¿½
     USG_GameObject virus = USG_createSprite("Assets/Images/Virus.png", USG_RECT_UNIT, USG_RECT(500, 300, 50, 50), "Front");
     virus->parent = NULL;
 
@@ -82,7 +85,7 @@ int main(int argv, char * argc[]) {
             } else if (ev.type == SDL_MOUSEBUTTONUP) {
                 grab = 0;
             } else if (ev.type == SDL_MOUSEMOTION && grab) {
-                //Gestion grab sur une fenêtre ATTENTION comme je crée les fenêtres dans des méthodes sans utiliser de pointeur, je n'y est plus accès
+                //Gestion grab sur une fenï¿½tre ATTENTION comme je crï¿½e les fenï¿½tres dans des mï¿½thodes sans utiliser de pointeur, je n'y est plus accï¿½s
                 USG_GO_move(giveMeFrame, USG_VECTOR(ev.motion.xrel, ev.motion.yrel));
                 USG_GO_move(Ball, USG_VECTOR(ev.motion.xrel, ev.motion.yrel));
             }

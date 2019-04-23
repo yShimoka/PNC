@@ -30,6 +30,9 @@ void USG_LIST_clear(USG_List list);
 
 USG_List USG_LIST_create();
 
+int USG_LIST_find(USG_List list, void* data);
+void USG_LIST_remove(USG_List list, int index);
+
 void USG_LIST_forEach(USG_List list, void (*iterable)(void *));
 void USG_LIST_sort(USG_List list, int (*comparison)(void* a, void* b));
 

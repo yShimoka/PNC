@@ -11,6 +11,8 @@
 #define USG_COLOR(r, g, b, a) (SDL_Color) { r, g, b, a }
 
 struct USG_GameObjectBase {
+    int uid;
+
     struct USG_GameObjectBase *parent;
 
     struct USG_Transform transform;
@@ -38,6 +40,8 @@ void USG_GO_setSize(USG_GameObject object, struct USG_Vector size);
 struct USG_Vector USG_GO_getPosition(USG_GameObject object);
 struct USG_Vector USG_GO_getSize(USG_GameObject object);
 void USG_GO_move(USG_GameObject object, struct USG_Vector delta);
+
+void USG_destroy(USG_GameObject* object);
 
 void USG_updateGameObjects();
 

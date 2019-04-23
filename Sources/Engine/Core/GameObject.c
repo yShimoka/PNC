@@ -5,6 +5,10 @@
 #include "Engine/Fs/ImageLoader.h"
 #include "Engine/Fs/FontLoader.h"
 
+#include <stdio.h>
+
+int gobjCounter = 0;
+
 USG_List _USG_getGameObjects() {
     static USG_List list = NULL;
 
@@ -31,7 +35,10 @@ USG_GameObject USG_createSprite(const char * texturePath, struct USG_Rect uv, st
     object->dest = dest;
     object->uvs = uv;
 
+    object->parent = NULL;
     object->update = NULL;
+
+    object->uid = ++gobjCounter;
 
     USG_LIST_append(_USG_getGameObjects(), object);
 
@@ -55,7 +62,10 @@ USG_GameObject USG_createSquare(SDL_Color color, struct USG_Rect dest, const cha
     object->dest = dest;
     object->uvs = USG_RECT(0, 0, 1, 1);
 
+    object->parent = NULL;
     object->update = NULL;
+
+    object->uid = ++gobjCounter;
 
     USG_LIST_append(_USG_getGameObjects(), object);
 
@@ -84,7 +94,10 @@ USG_GameObject USG_createText(const char * text, const char * font, int fontSize
     object->dest = dest;
     object->uvs = USG_RECT(0, 0, 1, 1);
 
+    object->parent = NULL;
     object->update = NULL;
+
+    object->uid = ++gobjCounter;
 
     USG_LIST_append(_USG_getGameObjects(), object);
 
@@ -153,6 +166,19 @@ void USG_GO_move(USG_GameObject object, struct USG_Vector delta) {
     USG_GO_setPosition(object,
         USG_V_add(USG_GO_getPosition(object), delta)
     );
+}
+
+void USG_destroy(USG_GameObject* object) {
+    int dbg = USG_LIST_size(_USG_getGameObjects());
+    int index = USG_LIST_find(_USG_getGameObjects(), *object);
+
+    if (index >= 0) USG_LIST_remove(_USG_getGameObjects(), index);
+    else fprintf(stderr, "GameObject does not exist !");
+    
+    dbg = USG_LIST_size(_USG_getGameObjects());
+
+    USG_deallocate(*object);
+    *object = NULL;
 }
 
 void _USG_clearGameObject(void* element) {

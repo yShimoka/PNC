@@ -125,6 +125,65 @@ int USG_LIST_size(USG_List list) {
     }
 }
 
+int USG_LIST_find(USG_List list, void* data) {
+    // Check if the list is empty.
+    if (*list == NULL) {
+        return -1;
+    } else {
+        // Get the head of the list.
+        struct USG_Node* head = USG_LIST_findFirst(*list);
+
+        // Loop until the end.
+        int counter = 0;
+        while ((head != NULL) && (head->pContents != data)) {
+            head = _USG_LIST_safeNext(head);
+            counter++;
+        }
+
+        // If we reached the end, return -1.
+        if (head == NULL) counter = -1;
+
+        return counter;
+    }
+}
+
+void USG_LIST_remove(USG_List list, int index) {
+    // Check if the list is empty.
+    if (*list != NULL) {
+        // If the list has a single item.
+        if (USG_LIST_size(list) == 1) {
+            // Free the last element.
+            USG_deallocate(*list);
+            list = NULL;
+        } else {
+            // Get the head of the list.
+            struct USG_Node* head = USG_LIST_findFirst(*list);
+
+            // Loop until the index.
+            int counter = 0;
+            while ((_USG_LIST_safeNext(head) != NULL) && (counter < index)) {
+                head = _USG_LIST_safeNext(head);
+                counter++;
+            }
+
+            // If the head is not null.
+            if (head != NULL) {
+                // Get the elements around the head.
+                struct USG_Node *last, *next;
+                last = head->pLast;
+                next = head->pNext;
+
+                // Free the node.
+                USG_deallocate(head);
+
+                // Update the pointers.
+                last->pNext = next;
+                if (next != NULL) next->pLast = last;
+            }
+        }
+    }
+}
+
 void USG_LIST_clear(USG_List list) {
     struct USG_Node* head = USG_LIST_findFirst(*list);
     struct USG_Node* next = _USG_LIST_safeNext(head);
