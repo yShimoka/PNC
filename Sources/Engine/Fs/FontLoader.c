@@ -60,7 +60,7 @@ struct USG_Font* USG_FONT_getFont(const char * path, int size) {
 
 SDL_Texture* USG_FONT_render(const char * text, struct USG_Font* font, SDL_Color fgColor) {
     // Create a new texture from the font.
-    SDL_Surface* surface = TTF_RenderText_Blended(font->pFont, text, fgColor);
+    SDL_Surface* surface = TTF_RenderUTF8_Blended(font->pFont, text, fgColor);
     SDL_Texture* texture = SDL_CreateTextureFromSurface(_USG_WINMAN_getWindow()->pRenderer, surface);
     SDL_FreeSurface(surface);
     return texture;

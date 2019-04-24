@@ -45,10 +45,10 @@ int main(int argv, char * argc[]) {
     USG_GameObject ConsoleText1 = USG_createText("tester ! Si tu est trop faible, je", "Assets/Fonts/VCR_OSD.ttf", 72, USG_COLOR(255, 248, 255, 255), USG_RECT(5, 25, 260, 15), "Base");
     ConsoleText1->parent = consoleContent;
 
-    USG_GameObject ConsoleText2 = USG_createText("d�truirai toutes tes donn�es.", "Assets/Fonts/VCR_OSD.ttf", 72, USG_COLOR(255, 248, 255, 255), USG_RECT(5, 45, 220, 15), "Base");
+    USG_GameObject ConsoleText2 = USG_createText("détruirai toutes tes données.", "Assets/Fonts/VCR_OSD.ttf", 72, USG_COLOR(255, 248, 255, 255), USG_RECT(5, 45, 220, 15), "Base");
     ConsoleText2->parent = consoleContent;
 
-    USG_GameObject ConsoleText3 = USG_createText("Commen�ons donne-moi...", "Assets/Fonts/VCR_OSD.ttf", 72, USG_COLOR(255, 248, 255, 255), USG_RECT(5, 65, 220, 15), "Base");
+    USG_GameObject ConsoleText3 = USG_createText("Commençons donne-moi...", "Assets/Fonts/VCR_OSD.ttf", 72, USG_COLOR(255, 248, 255, 255), USG_RECT(5, 65, 220, 15), "Base");
     ConsoleText3->parent = consoleContent;
 
     InitGiveMe(&giveMeFrame,&giveMeTitleBar,&giveMeTitleBarLogo,&giveMeTitleBarText,&giveMeContent,&giveMeCross);
