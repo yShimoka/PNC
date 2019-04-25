@@ -5,6 +5,8 @@
 
 #include <SDL2_ttf/SDL_ttf.h>
 
+#include "Engine/Math/Vector.h"
+
 struct USG_Font {
     TTF_Font* pFont;
 
@@ -13,6 +15,8 @@ struct USG_Font {
 };
 
 USG_List _USG_FONT_getFontList();
+
+struct USG_Vector USG_FONT_predictTextSize(const char * text, const char * path, int size);
 
 int USG_FONT_isSame(struct USG_Font* self, struct USG_Font* other);
 

@@ -1,23 +1,24 @@
 #include "Game/CreationComposantsBasiques.h"
 
 
+/*
 void InitLayers(){
-    //Création des layers de base
+    //Crï¿½ation des layers de base
     USG_LAYER_make("Desktop", -1);
     USG_LAYER_make("Base", 0);
     USG_LAYER_make("Front", 1);
 }
 
 void InitDesktop(USG_GameObject *desktop, USG_GameObject *taskBarFrame, USG_GameObject *taskBarStartButtonContour, USG_GameObject *taskBarStartButtonFrame, USG_GameObject *taskBarStartButtonTitle, USG_GameObject *taskBarStartButtonLogo) {
-    //Création du bureau
+    //Crï¿½ation du bureau
     *desktop = USG_createSquare(USG_COLOR(0,120,127,255), USG_RECT(0, 0, 800, 600), "Desktop");
     (*desktop)->parent = NULL;
 
-    //Création de la barre des tâches
+    //Crï¿½ation de la barre des tï¿½ches
     *taskBarFrame = USG_createSquare(USG_COLOR(191,190,191,255),USG_RECT(0,570,800,600),"Desktop");
     (*taskBarFrame)->parent = NULL;
 
-    //Création du bouton démarrer
+    //Crï¿½ation du bouton dï¿½marrer
     *taskBarStartButtonContour = USG_createSquare(USG_COLOR(0,0,0,255),USG_RECT(3,3,60,25),"Desktop");
     (*taskBarStartButtonContour)->parent = *taskBarFrame;
     //Fond gris
@@ -33,7 +34,7 @@ void InitDesktop(USG_GameObject *desktop, USG_GameObject *taskBarFrame, USG_Game
 
 
 void InitConsole(USG_GameObject *windowFrame, USG_GameObject *windowTitleBar, USG_GameObject *windowTitleBarLogo, USG_GameObject *windowTitleBarText, USG_GameObject *windowContent, USG_GameObject *windowCross) {
-    //Création de la fenêtre console
+    //Crï¿½ation de la fenï¿½tre console
     //FOND
     *windowFrame = USG_createSquare(USG_COLOR(191,190,191,255), USG_RECT(450, 5, 300, 200), "Base");
     (*windowFrame)->parent = NULL;
@@ -56,7 +57,7 @@ void InitConsole(USG_GameObject *windowFrame, USG_GameObject *windowTitleBar, US
 }
 
 void InitGiveMe(USG_GameObject *windowFrame, USG_GameObject *windowTitleBar, USG_GameObject *windowTitleBarLogo, USG_GameObject *windowTitleBarText, USG_GameObject *windowContent, USG_GameObject *windowCross) {
-    //Création de la fenêtre console
+    //Crï¿½ation de la fenï¿½tre console
     //FOND
     *windowFrame = USG_createSquare(USG_COLOR(191,190,191,255), USG_RECT(10, 5, 300, 200), "Base");
     (*windowFrame)->parent = NULL;
@@ -77,3 +78,4 @@ void InitGiveMe(USG_GameObject *windowFrame, USG_GameObject *windowTitleBar, USG
     (*windowCross)->parent = *windowTitleBar;
 
 }
+*/

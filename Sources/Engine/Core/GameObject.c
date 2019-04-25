@@ -19,8 +19,8 @@ USG_List _USG_getGameObjects() {
     return list;
 }
 
-USG_GameObject USG_createSprite(const char * texturePath, struct USG_Rect uv, struct USG_Rect dest, const char * layer) {
-    USG_GameObject object = (USG_GameObject)USG_allocate(sizeof(struct USG_GameObjectBase));
+USG_GameObject USG_createSprite(const char * texturePath, struct USG_Rect uv, struct USG_Rect dest, const char * layer, int zOrder) {
+    USG_GameObject object = (USG_GameObject)USG_allocate(1, sizeof(struct USG_GameObjectBase));
 
     object->renderable = USG_RENDER_createTexture(USG_IMG_loadFromFile(texturePath)->pTexture, uv, dest);
     USG_LAYER_addRenderable(layer, object->renderable);
@@ -33,6 +33,7 @@ USG_GameObject USG_createSprite(const char * texturePath, struct USG_Rect uv, st
 
     object->dest = dest;
     object->uvs = uv;
+    object->zOrder = zOrder;
 
     object->parent = NULL;
     object->update = NULL;
@@ -46,8 +47,8 @@ USG_GameObject USG_createSprite(const char * texturePath, struct USG_Rect uv, st
     return object;
 }
 
-USG_GameObject USG_createSquare(SDL_Color color, struct USG_Rect dest, const char * layer) {
-    USG_GameObject object = (USG_GameObject)USG_allocate(sizeof(struct USG_GameObjectBase));
+USG_GameObject USG_createSquare(SDL_Color color, struct USG_Rect dest, const char * layer, int zOrder) {
+    USG_GameObject object = (USG_GameObject)USG_allocate(1, sizeof(struct USG_GameObjectBase));
 
     object->renderable = USG_RENDER_createSquarePrimitive(color, dest);
     USG_LAYER_addRenderable(layer, object->renderable);
@@ -60,6 +61,7 @@ USG_GameObject USG_createSquare(SDL_Color color, struct USG_Rect dest, const cha
 
     object->dest = dest;
     object->uvs = USG_RECT(0, 0, 1, 1);
+    object->zOrder = zOrder;
 
     object->parent = NULL;
     object->update = NULL;
@@ -73,8 +75,8 @@ USG_GameObject USG_createSquare(SDL_Color color, struct USG_Rect dest, const cha
     return object;
 }
 
-USG_GameObject USG_createText(const char * text, const char * font, int fontSize, SDL_Color color, struct USG_Rect dest, const char * layer) {
-    USG_GameObject object = (USG_GameObject)USG_allocate(sizeof(struct USG_GameObjectBase));
+USG_GameObject USG_createText(const char * text, const char * font, int fontSize, SDL_Color color, struct USG_Rect dest, const char * layer, int zOrder) {
+    USG_GameObject object = (USG_GameObject)USG_allocate(1, sizeof(struct USG_GameObjectBase));
 
     object->renderable = USG_RENDER_createTexture(
         USG_FONT_render(text, USG_FONT_getFont(font, fontSize), color),
@@ -92,6 +94,7 @@ USG_GameObject USG_createText(const char * text, const char * font, int fontSize
     object->transform.origin = dest.origin;
     object->dest = dest;
     object->uvs = USG_RECT(0, 0, 1, 1);
+    object->zOrder = zOrder;
 
     object->parent = NULL;
     object->update = NULL;
@@ -123,39 +126,53 @@ void _USG_updateGameObject(void * element) {
         gObj->update(gObj);
     }
 
-    // Update the renderable.
-    // Apply the transformations.
-    struct USG_Rect dest = gObj->dest;
-    dest.origin = USG_GO_getWorldPosition(gObj);
-    struct USG_Rect uv = gObj->uvs;
+    if (!gObj->bIsVisible) gObj->renderable->bVisible = 0;
+    else {
+        gObj->renderable->bVisible = 1;
+        // Update the renderable.
+        // Apply the transformations.
+        struct USG_Rect dest = gObj->dest;
+        dest.origin = USG_GO_getWorldPosition(gObj);
+        struct USG_Rect uv = gObj->uvs;
 
-    // Check if the masking is enabled.
-    if (gObj->bIsMasked && gObj->mask != NULL) {
-        // Get the intersection of the square and its mask.
-        struct USG_Rect inter = USG_R_intersect(dest, USG_RECT_V(USG_GO_getWorldPosition(gObj->mask), gObj->mask->dest.extent));
+        // Check if the masking is enabled.
+        if (gObj->bIsMasked && gObj->mask != NULL) {
+            // Get the intersection of the square and its mask.
+            struct USG_Rect inter = USG_R_intersect(dest, USG_RECT_V(USG_GO_getWorldPosition(gObj->mask), gObj->mask->dest.extent));
 
-        // Morph the uv map.
-        //uv = USG_RECT_V(
-        //    USG_V_sub(inter.origin, dest.origin),
-        //    USG_V_sub(inter.extent, dest.extent)
-        //);
-        uv.origin = USG_V_sub(inter.origin,dest.origin);
-        uv.extent = inter.extent;
+            // Morph the uv map.
+            //uv = USG_RECT_V(
+            //    USG_V_sub(inter.origin, dest.origin),
+            //    USG_V_sub(inter.extent, dest.extent)
+            //);
+            uv.origin = USG_V_sub(inter.origin,dest.origin);
+            uv.extent = inter.extent;
 
-        uv.origin.x /= dest.extent.x;
-        uv.origin.y /= dest.extent.y;
-        uv.extent.x /= dest.extent.x;
-        uv.extent.y /= dest.extent.y;
+            uv.origin.x /= dest.extent.x;
+            uv.origin.y /= dest.extent.y;
+            uv.extent.x /= dest.extent.x;
+            uv.extent.y /= dest.extent.y;
 
-        dest = inter;
+            dest = inter;
+        }
+
+        // Update the renderable.
+        gObj->renderable->dest = dest;
+        gObj->renderable->src = uv;
     }
 
-    // Update the renderable.
-    gObj->renderable->dest = dest;
-    gObj->renderable->src = uv;
+}
+
+int _USG_GO_compareZOrder(void* a, void* b) {
+    USG_GameObject ga = a;
+    USG_GameObject gb = b;
+
+    return ga->zOrder > gb->zOrder ? -1 : (ga->zOrder < gb->zOrder ? 1 : 0); 
 }
 
 void USG_updateGameObjects() {
+    USG_LIST_sort(_USG_getGameObjects(), _USG_GO_compareZOrder);
+    
     USG_LIST_forEach(_USG_getGameObjects(), _USG_updateGameObject);
 }
 

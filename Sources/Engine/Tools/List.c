@@ -3,7 +3,7 @@
 #include "Engine/Tools/Allocator.h"
 
 struct USG_Node* _USG_LIST_createNode(struct USG_Node* last, struct USG_Node* next, void* contents) {
-    struct USG_Node* node = (struct USG_Node*)USG_allocate(sizeof(struct USG_Node));
+    struct USG_Node* node = (struct USG_Node*)USG_allocate(1, sizeof(struct USG_Node));
 
     node->pLast = last;
     node->pNext = next;
@@ -154,7 +154,7 @@ void USG_LIST_remove(USG_List list, int index) {
         if (USG_LIST_size(list) == 1) {
             // Free the last element.
             USG_deallocate(*list);
-            list = NULL;
+            *list = NULL;
         } else {
             // Get the head of the list.
             struct USG_Node* head = USG_LIST_findFirst(*list);
@@ -177,7 +177,8 @@ void USG_LIST_remove(USG_List list, int index) {
                 USG_deallocate(head);
 
                 // Update the pointers.
-                last->pNext = next;
+                if (last != NULL) last->pNext = next;
+                else *list = next;
                 if (next != NULL) next->pLast = last;
             }
         }
@@ -198,7 +199,7 @@ void USG_LIST_clear(USG_List list) {
 }
 
 USG_List USG_LIST_create() {
-    USG_List source = (USG_List)USG_allocate(sizeof(struct USG_Node*));
+    USG_List source = (USG_List)USG_allocate(1, sizeof(struct USG_Node*));
     *source = NULL;
 
     return source;

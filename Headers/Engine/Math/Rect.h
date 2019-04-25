@@ -15,4 +15,6 @@ struct USG_Rect {
 struct USG_Rect USG_R_intersect(struct USG_Rect a, struct USG_Rect b);
 struct USG_Rect USG_R_mul(struct USG_Rect a, struct USG_Vector v);
 
+int USG_R_containsPoint(struct USG_Rect rect, struct USG_Vector vect);
+
 #endif /* __USAGI_RECT_H__ */

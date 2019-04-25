@@ -8,8 +8,8 @@ void __drawPtrCount() {
     printf("Pointer count @%d\n", ptrCounter);
 }
 
-void* USG_allocate(size_t size) {
-    void* data = malloc(size);
+void* USG_allocate(size_t count, size_t size) {
+    void* data = calloc(count, size);
     printf("Allocated pointer   @%p; ", data);
     ptrCounter++;
     __drawPtrCount();

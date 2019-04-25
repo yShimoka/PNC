@@ -38,7 +38,7 @@ void USG_LAYER_make(const char * name, int zOrder) {
         fprintf(stderr, "There already exists a layer named `%s`\n", name);
     } else {
         // Create the layer.
-        struct USG_Layer * layer = (struct USG_Layer *)USG_allocate(sizeof(struct USG_Layer));
+        struct USG_Layer * layer = (struct USG_Layer *)USG_allocate(1, sizeof(struct USG_Layer));
 
         layer->pName = name;
         layer->zOrder = zOrder;
@@ -76,7 +76,7 @@ void USG_LAYER_destroyRenderable(struct USG_Renderable* renderable) {
 
     int index = USG_LIST_find(layer->pRenderables, renderable);
 
-    if (index > 0) USG_LIST_remove(layer->pRenderables, index);
+    if (index >= 0) USG_LIST_remove(layer->pRenderables, index);
 
     // Destroy the renderable.
     USG_deallocate(renderable);

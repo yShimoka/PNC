@@ -4,7 +4,7 @@
 
 struct USG_Renderable* USG_RENDER_createSquarePrimitive(SDL_Color color, struct USG_Rect size) {
     // Create the element.
-    struct USG_Renderable* nextObj = (struct USG_Renderable *)USG_allocate(sizeof(struct USG_Renderable));
+    struct USG_Renderable* nextObj = (struct USG_Renderable *)USG_allocate(1, sizeof(struct USG_Renderable));
 
     nextObj->type = USG_RENDER_PRIMITIVE_SQUARE;
     nextObj->dest = size;
@@ -17,7 +17,7 @@ struct USG_Renderable* USG_RENDER_createSquarePrimitive(SDL_Color color, struct 
 
 struct USG_Renderable* USG_RENDER_createTexture(SDL_Texture* texture, struct USG_Rect source, struct USG_Rect dest) {
     // Create the element.
-    struct USG_Renderable* nextObj = (struct USG_Renderable *)USG_allocate(sizeof(struct USG_Renderable));
+    struct USG_Renderable* nextObj = (struct USG_Renderable *)USG_allocate(1, sizeof(struct USG_Renderable));
 
     nextObj->type = USG_RENDER_TEXTURE;
     nextObj->pTexture = texture;

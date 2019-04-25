@@ -24,3 +24,17 @@ struct USG_Rect USG_R_mul(struct USG_Rect a, struct USG_Vector v) {
         a.extent.y * v.y
     );
 }
+
+int USG_R_containsPoint(struct USG_Rect rect, struct USG_Vector vect) {
+    // Check if the point is in the box.
+    if (
+        rect.origin.x < vect.x &&
+        rect.origin.y < vect.y &&
+        (rect.origin.x + rect.extent.x) > vect.x &&
+        (rect.origin.y + rect.extent.y) > vect.y
+    ) {
+        return 1;
+    } else {
+        return 0;
+    }
+}

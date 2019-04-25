@@ -1,12 +1,23 @@
 #include "Engine/Rendering/Windows.h"
 #include "Engine/Core/GameObject.h"
 #include "Engine/Rendering/Layer.h"
-#include "Game/CreationComposantsBasiques.h"
+#include "Game/Windows/VirtualWindow.h"
+#include "Game/Windows/Console.h"
+#include "Engine/Fs/FontLoader.h"
 
 #include <SDL2/SDL.h>
 #include <SDL2_image/SDL_image.h>
 #include <SDL2_ttf/SDL_ttf.h>
 #include <SDL2_mixer/SDL_mixer.h>
+
+// DEBUG : Prints a text in the window.
+void consoleEvent(void * element, SDL_Event * event) {
+    USG_Console console = element;
+
+    if (event->type == SDL_MOUSEBUTTONDOWN) {
+        USG_CON_print(console, "Wildcard Wombat");
+    }
+}
 
 int main(int argv, char * argc[]) {
     SDL_Init(SDL_INIT_EVERYTHING);
@@ -22,55 +33,15 @@ int main(int argv, char * argc[]) {
 
     USG_Window* pWindow = _USG_WINMAN_getWindow();
 
-    InitLayers();
+    USG_LAYER_make("Desktop-Back", 0);
+    USG_LAYER_make("Desktop-Front", 1);
 
+    USG_Console console = USG_CON_createConsole("?????????");
+    USG_GO_setPosition(console->window->frame, USG_VECTOR(400, 200));
+    console->window->child_onEvent = consoleEvent;
+    
+    USG_GameObject desktop = USG_createSquare(USG_COLOR(0, 127, 0, 255), USG_RECT(0, 0, 800, 600), "Desktop-Back", 0);
 
-
-
-
-    InitDesktop(&desktop,&taskBarFrame,&taskBarStartButtonContour,&taskBarStartButtonFrame,&taskBarStartButtonTitle,&taskBarStartButtonLogo);
-
-    InitConsole(&consoleFrame,&consoleTitleBar,&consoleTitleBarLogo,&consoleTitleBarText,&consoleContent,&consoleCross);
-
-
-
-    USG_GameObject test = USG_createSquare(USG_COLOR(255, 255, 255, 255), USG_RECT(0, 0, 800, 600), "Desktop");
-    USG_destroy(&test);
-
-    // A RANGER DANS DES METHODES !!!!
-    //test �criture console
-    USG_GameObject ConsoleText = USG_createText("Bonjour, je suis un virus. Je vais te", "Assets/Fonts/VCR_OSD.ttf", 72, USG_COLOR(255, 248, 255, 255), USG_RECT(5, 5, 270, 15), "Base");
-    ConsoleText->parent = consoleContent;
-
-    USG_GameObject ConsoleText1 = USG_createText("tester ! Si tu est trop faible, je", "Assets/Fonts/VCR_OSD.ttf", 72, USG_COLOR(255, 248, 255, 255), USG_RECT(5, 25, 260, 15), "Base");
-    ConsoleText1->parent = consoleContent;
-
-    USG_GameObject ConsoleText2 = USG_createText("détruirai toutes tes données.", "Assets/Fonts/VCR_OSD.ttf", 72, USG_COLOR(255, 248, 255, 255), USG_RECT(5, 45, 220, 15), "Base");
-    ConsoleText2->parent = consoleContent;
-
-    USG_GameObject ConsoleText3 = USG_createText("Commençons donne-moi...", "Assets/Fonts/VCR_OSD.ttf", 72, USG_COLOR(255, 248, 255, 255), USG_RECT(5, 65, 220, 15), "Base");
-    ConsoleText3->parent = consoleContent;
-
-    InitGiveMe(&giveMeFrame,&giveMeTitleBar,&giveMeTitleBarLogo,&giveMeTitleBarText,&giveMeContent,&giveMeCross);
-
-    USG_GameObject giveMeText = USG_createText("Une balle", "Assets/Fonts/VCR_OSD.ttf", 72, USG_COLOR(0, 0, 0, 255), USG_RECT(115, 100, 75, 15), "Front");
-    giveMeText->parent = NULL;
-    giveMeText->bIsMasked = 1;
-    giveMeText->mask = giveMeContent;
-
-    USG_GameObject Ball = USG_createSprite("Assets/Images/Ball.png", USG_RECT_UNIT, USG_RECT(10, 500, 20, 26), "Front");
-    Ball->parent = NULL;
-
-    USG_GameObject ballText = USG_createText("balle", "Assets/Fonts/VCR_OSD.ttf", 72, USG_COLOR(255, 248, 255, 255), USG_RECT(0, 30, 25, 15), "Front");
-    ballText->parent = Ball;
-
-    /* Ajout d'un objet cach�
-    USG_GameObject virus = USG_createSprite("Assets/Images/Virus.png", USG_RECT_UNIT, USG_RECT(500, 300, 50, 50), "Front");
-    virus->parent = NULL;
-
-    virus->bIsMasked = 1;
-    virus->mask = windowContents;
-    */
     int stop = 0;
     int grab = 0;
     while (!stop) {
@@ -80,17 +51,12 @@ int main(int argv, char * argc[]) {
         while (SDL_PollEvent(&ev)) {
             if (ev.type == SDL_QUIT) {
                 stop = 1;
-            } else if (ev.type == SDL_MOUSEBUTTONDOWN) {
-                grab = 1;
-            } else if (ev.type == SDL_MOUSEBUTTONUP) {
-                grab = 0;
-            } else if (ev.type == SDL_MOUSEMOTION && grab) {
-                //Gestion grab sur une fen�tre ATTENTION comme je cr�e les fen�tres dans des m�thodes sans utiliser de pointeur, je n'y est plus acc�s
-                USG_GO_move(giveMeFrame, USG_VECTOR(ev.motion.xrel, ev.motion.yrel));
-                USG_GO_move(Ball, USG_VECTOR(ev.motion.xrel, ev.motion.yrel));
             }
+
+            USG_VWIN_onEvent(ev);
         }
 
+        USG_VWIN_onUpdate();
         USG_updateGameObjects();
         USG_WINMAN_present();
 
@@ -100,6 +66,7 @@ int main(int argv, char * argc[]) {
         }
     }
 
+    USG_VWIN_clear();
     USG_clearGameObjects();
     USG_WINMAN_quit();
 

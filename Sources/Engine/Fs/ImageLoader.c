@@ -35,7 +35,7 @@ struct USG_Texture* USG_IMG_loadFromFile(const char * path) {
         SDL_FreeSurface(img);
 
         // Store the image in a new object.
-        struct USG_Texture * texture = (struct USG_Texture *)USG_allocate(sizeof(struct USG_Texture));
+        struct USG_Texture * texture = (struct USG_Texture *)USG_allocate(1, sizeof(struct USG_Texture));
 
         texture->pPath = path;
         texture->pTexture = sdlTexture;

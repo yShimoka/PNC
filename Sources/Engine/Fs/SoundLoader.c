@@ -31,7 +31,7 @@ struct USG_Sfx* USG_MIX_loadSFX(const char * sfxPath) {
 
     if (chunk != NULL) {
         // Create a new SFX object.
-        struct USG_Sfx* sfx = (struct USG_Sfx*)USG_allocate(sizeof(struct USG_Sfx));
+        struct USG_Sfx* sfx = (struct USG_Sfx*)USG_allocate(1, sizeof(struct USG_Sfx));
 
         sfx->pSoundChunck = chunk;
         sfx->pSfxPath = sfxPath;
